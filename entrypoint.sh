@@ -24,10 +24,10 @@ echo \
     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-# sudo groupadd docker
+sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
-mkdir -p /home/"$USER"/.docker
+sudo mkdir -p /home/"$USER"/.docker
 sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
 sudo chmod g+rwx "$HOME/.docker" -R
 sudo systemctl enable docker.service
@@ -35,13 +35,16 @@ sudo systemctl enable containerd.service
 # sudo reboot
 # docker ----------------------------------
 # microk8s --------------------------------
+sudo sudo snap install core
 sudo snap install microk8s --classic
-mkdir -p ~/.kube
-sudo usermod -a -G microk8s $USER
-sudo chown -R $USER ~/.kube
-microk8s status --wait-ready
+sudo mkdir -p ~/.kube && \
+    sudo usermod -a -G microk8s $USER && \
+    sudo chown -R $USER ~/.kube && \
+    sudo microk8s status --wait-ready
+sudo microk8s enable dns
 cp /var/snap/microk8s/current/args/kube-apiserver /var/snap/microk8s/current/args/kube-apiserver.backup
 cp kube-apiserver /var/snap/microk8s/current/args/kube-apiserver
+# sudo reboot
 # microk8s --------------------------------
 # nvm -------------------------------------
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
@@ -53,3 +56,5 @@ curl -s "https://get.sdkman.io" | bash
 cp $HOME/.zshrc $HOME/.zshrc.backup
 cp zshrc $HOME/.zshrc
 # zshrc -----------------------------------
+# mysql -----------------------------------
+# mysql -----------------------------------
